@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+<script type="text/javascript" src="json2.js"></script>
+<script type="text/javascript" src="cssjson.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://ejohn.org/files/jsdiff.js"></script>
+<link href="example.css" media="screen" rel="Stylesheet" type="text/css"/>
+
+<style>
+	 #content2 { 
+    	margin: 0 7.6%; 
+    	width: auto; 
+	 } 
+</style>
+
+
+
+<style>
+	 #content3 { 
+    	margin: 0 7.6%; 
+    	width: auto; 
+	 } 
+</style>
+
+
+<script type="text/javascript">
+	
+  	var cssAnal = function(arg){
+			var html = html;
+			var css = [];
+			
+
+			getPageStyle();
+
+			console.log('HTML:\n');
+			console.log(this.html);
+			
+			console.log('CSS first:\n');
+			console.log(this.css);
+			
+			function cssToJson(cssString){
+				return CSSJSON.toJSON(cssString, true);
+			}
+			
+			function jsonToCss(json){
+				return CSSJSON.toCSS(json, true);
+			}
+			
+			var jsonCss = cssToJson(this.css);
+			
+			function findSelectorInHtml(selector){
+				var query = $(html).filter(selector);
+				return query.length==1?true:false;
+			}
+
+			function getPageStyle(){
+				console.log(CSSJSON.toJSON($('style').html(), false));
+			}
+			
+
+			
+			function parseCss(){
+				var blockCssContainers = $('link, style');
+				var self = this;
+
+				console.log(self.css.push);
+
+				$.each(blockCssContainers, function(key, item){
+					if(item.nodeName == "STYLE"){
+						self.css.push(cssToJson($(item).html()));
+					}
+				})
+
+				console.log(self.css);
+			}
+
+			parseCss();
+			
+			
+			findUseLessSelector();
+			
+			this.testFind = function(){
+				var self = this
+				return $(self).find('div');
+			}
+		}
+		
+		//var cssA = new cssAnal('sdfd');
+		//console.info(cssA.testFind());
+		/**/
+		
+		 
+
+		 function cssCollector(){
+		 	var css = {
+		 		start: [],
+		 		useful: [],
+		 		useless: []
+		 	};
+		 	var html = '';
+
+		 	// function parseCss -> parse <style> and <link> and convert it into JSON  
+		 	function parseCss(){
+				var blockCssContainers = $('link, style');
+				var self = this;
+
+				$.each(blockCssContainers, function(key, item){
+					if(item.nodeName == "STYLE"){
+						css.start.push(CSSJSON.toJSON($(item).html()));
+					}else{
+						$.ajax({
+							  	    url: item.href,
+							  	    dataType: "html",
+							  	    async: false,
+									success: function(response){
+										css.start.push(CSSJSON.toJSON(response));			
+									},
+									error: function(er){
+										
+									}
+								});
+
+					}
+				})
+			}
+
+			function parseHtml(){
+				html = window.document;
+			}
+			
+			function checkSelectorUsefulness(selector){
+				try{
+					var query = $(html).find(selector);
+					return query.length == 1 ? true : false;
+				}catch(e){
+					//console.log(selector);
+					//console.info(e);
+				}
+			}
+
+			function checkStyleInstanceOnUsefulness(CssInstance){
+								 
+				for(var item in CssInstance){
+					if(!checkSelectorUsefulness(item)){
+						css.useless.push(CssInstance[item]);
+					}else{
+						css.useful.push(CssInstance[item]);
+					}
+				} 
+			}
+
+			function checkStyles(){
+				$.each(css.start, function(key, item){
+					checkStyleInstanceOnUsefulness(item);
+				});
+			}
+
+			function runApp(){
+				parseCss();
+				parseHtml();
+				checkStyles();
+				console.log(css);
+			}
+
+			runApp();
+
+		 }
+		
+		 window.onload = function(){
+			var cssC = new cssCollector();
+		}
+		
+     
+</script>
+</head>
+	<body>
+		<div id = 'content2'></div>
+	</body>
+</html>
