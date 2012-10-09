@@ -11,6 +11,7 @@
 	 #content2 { 
     	margin: 0 7.6%; 
     	width: auto; 
+    	color: red;
 	 } 
 </style>
 
@@ -26,70 +27,6 @@
 
 <script type="text/javascript">
 	
-  	var cssAnal = function(arg){
-			var html = html;
-			var css = [];
-			
-
-			getPageStyle();
-
-			console.log('HTML:\n');
-			console.log(this.html);
-			
-			console.log('CSS first:\n');
-			console.log(this.css);
-			
-			function cssToJson(cssString){
-				return CSSJSON.toJSON(cssString, true);
-			}
-			
-			function jsonToCss(json){
-				return CSSJSON.toCSS(json, true);
-			}
-			
-			var jsonCss = cssToJson(this.css);
-			
-			function findSelectorInHtml(selector){
-				var query = $(html).filter(selector);
-				return query.length==1?true:false;
-			}
-
-			function getPageStyle(){
-				console.log(CSSJSON.toJSON($('style').html(), false));
-			}
-			
-
-			
-			function parseCss(){
-				var blockCssContainers = $('link, style');
-				var self = this;
-
-				console.log(self.css.push);
-
-				$.each(blockCssContainers, function(key, item){
-					if(item.nodeName == "STYLE"){
-						self.css.push(cssToJson($(item).html()));
-					}
-				})
-
-				console.log(self.css);
-			}
-
-			parseCss();
-			
-			
-			findUseLessSelector();
-			
-			this.testFind = function(){
-				var self = this
-				return $(self).find('div');
-			}
-		}
-		
-		//var cssA = new cssAnal('sdfd');
-		//console.info(cssA.testFind());
-		/**/
-		
 		 
 
 		 function cssCollector(){
@@ -98,7 +35,10 @@
 		 		useful: [],
 		 		useless: []
 		 	};
+
 		 	var html = '';
+
+		 	var inlineStyleNodes = [];
 
 		 	// function parseCss -> parse <style> and <link> and convert it into JSON  
 		 	function parseCss(){
@@ -132,7 +72,7 @@
 			function checkSelectorUsefulness(selector){
 				try{
 					var query = $(html).find(selector);
-					return query.length == 1 ? true : false;
+					return query.length > 0 ? true : false;
 				}catch(e){
 					//console.log(selector);
 					//console.info(e);
@@ -143,9 +83,9 @@
 								 
 				for(var item in CssInstance){
 					if(!checkSelectorUsefulness(item)){
-						css.useless.push(CssInstance[item]);
+						css.useless[item] = (CssInstance[item]);
 					}else{
-						css.useful.push(CssInstance[item]);
+						css.useful[item] = (CssInstance[item]);
 					}
 				} 
 			}
@@ -154,6 +94,10 @@
 				$.each(css.start, function(key, item){
 					checkStyleInstanceOnUsefulness(item);
 				});
+			}
+
+			function getInlineStylesNode(){
+				inlineStyleNodes = $('*[style]');
 			}
 
 			function runApp(){
@@ -175,6 +119,171 @@
 </script>
 </head>
 	<body>
-		<div id = 'content2'></div>
+		<div id="head" class="other">
+	<div class="nav">
+		<ul>
+			<li><a href="/">Home</a></li>
+			<li><a href="/blog/">Blog</a></li>
+			<li><a rel="author" href="/about/">About Me</a></li>
+		</ul>
+	</div>
+	<div class="side">
+		<a href="http://ejohn.org/about/"><img src="/files/short.sm.jpg" class="logo" alt="John Resig" /></a>
+		<div class="text">
+			<a href="/about/" class="name"><strong>John</strong> Resig</a><br/>
+			<a rel="author" href="/about/">Contact</a>,
+			<a href="http://feeds.feedburner.com/JohnResig">Subscribe</a>
+		</div>
+	</div>
+</div>
+<div class="drop"><img src="/images/ejohn-main-drop.gif"/></div>
+<div id="wrap">
+	<div id="body"><div class="wrap">
+
+
+<div class="main">
+
+                <h2><a href="/blog/introducing-khan-cs/">Redefining the Introduction to Computer Science</a></h2>
+                <p>I'm incredibly excited to take this opportunity to announce a new project that I've been leading here at Khan Academy: Khan Academy Computer Science.
+
+
+
+We're releasing a completely new</p>
+                <p class="more"><a href="/blog/introducing-khan-cs/">Read More...</a></p>
+<div class='rest' style='clear:both;'><h2><a href='/blog/'>Recent <span>Posts</span></a></h2><br/><ol class='posts'><li>&raquo; <strong><a href="/blog/secret-omens/">Secret Omens: Book Update</a>:</strong> Jeff Atwood wrote up a post today on the merits of writing a technical...</li><li>&raquo; <strong><a href="/blog/image-similarity-search-wanted/">Image Similarity Search Wanted</a>:</strong> I've been working on a few projects in my spare time and one service, in...</li><li>&raquo; <strong><a href="/blog/javascript-as-a-first-language/">JavaScript as a First Language</a>:</strong> At Khan Academy we've been investigating teaching Computer Science to...</li></ol><div class="more"><a href="/blog/"><strong>All</strong> Posts...</a></div></div>
+<h2>Projects</h2>
+
+<div class="box large">
+<a href="http://jquery.com/" title="jQuery JavaScript Library"><img src="/images/jquery-76.png" class="icon" alt="jQuery JavaScript Library" /></a>
+<div class="desc">
+	<h3><a href="http://jquery.com/" title="jQuery JavaScript Library">jQuery</a></h3>
+	<p>Comprehensive DOM, Event, Animation, and Ajax JavaScript Library.</p>
+</div>
+</div>
+<div class="box large">
+<a href="http://processingjs.org/" title="Processing.js - JavaScript Visualization Langauge"><img src="/images/processing-76.png" class="icon" alt="Processing.js  - JavaScript Visualization Langauge" /></a>
+<div class="desc">
+	<h3><a href="http://processingjs.org/" title="Processing.js - JavaScript Visualization Langauge">Processing.js</a></h3>
+	<p>A port of the Processing Visualization language to JavaScript.</p>
+</div>
+</div>
+<div class="box large">
+<a href="http://sizzlejs.com/" title="Sizzle.js JavaScript Selector Library"><img src="/images/sizzle-76.png" class="icon" alt="Sizzle.js JavaScript Selector Library" /></a>
+<div class="desc">
+	<h3><a href="http://sizzlejs.com/" title="Sizzle.js JavaScript Selector Library">Sizzle.js</a></h3>
+	<p>Small, cross-browser, JavaScript CSS selector library.</p>
+</div>
+</div>
+<div class="boxes">
+<div class="box">
+<div class="desc">
+	<h3><a href="http://groups.google.com/group/envjs" title="Env.js Server-side Browser Environment">Env.js</a></h3>
+	<p>A pure-JavaScript, server-side, browser environment.</p>
+</div>
+</div>
+<div class="box">
+<div class="desc">
+	<h3><a href="http://fireunit.org/" title="FireUnit: Firebug Unit Testing">FireUnit</a></h3>
+	<p>JavaScript Unit Testing Extension for Firefox.</p>
+</div>
+</div>
+<div class="box">
+<div class="desc">
+	<h3><a href="http://dromaeo.com/" title="Dromaeo: JavaScript Performance Analysis">Dromaeo</a></h3>
+	<p>JavaScript and DOM performance analysis.</p>
+</div>
+</div>
+<div class="box">
+<div class="desc">
+	<h3><a href="http://docs.jquery.com/QUnit" title="QUnit: JavaScript Test Suite">QUnit</a></h3>
+	<p>JavaScript test suite and testrunner.</p>
+</div>
+</div>
+<div class="box">
+<div class="desc">
+	<h3><a href="https://wiki.mozilla.org/FUEL" title="FUEL: API for Firefox Extensions">FUEL</a></h3>
+	<p>Simple JavaScript API for Firefox Extensions.</p>
+</div>
+</div>
+<div class="box">
+<div class="desc">
+	<h3><a href="http://testswarm.com/" title="TestSwarm: Distributed Continuous Integration">TestSwarm</a></h3>
+	<p>Distributed continuous integration testing.</p>
+</div>
+</div>
+<div class="box">
+<div class="desc">
+	<h3><a href="http://ejohn.org/blog/simple-javascript-inheritance/" title="Simple JavaScript Inheritance">Simple Inheritance</a></h3>
+	<p>Simple Class-style JavaScript inheritance.</p>
+</div>
+</div>
+<div class="box">
+<div class="desc">
+	<h3><a href="http://ejohn.org/blog/javascript-micro-templating/" title="JavaScript Micro-Templating">Micro-Templating</a></h3>
+	<p>Simple templating for JavaScript.</p>
+</div>
+</div>
+<div class="box">
+<div class="desc">
+	<h3><a href="http://ejohn.org/blog/pure-javascript-html-parser/" title="Pure JavaScript HTML Parser">HTML Parser</a></h3>
+	<p>Pure JavaScript HTML Parser and DOM builder.</p>
+</div>
+</div>
+
+<div class="more"><a href="/category/projects/"><strong>All</strong> Projects...</a></div>
+
+</div>
+</div>        </div></div>
+
+        <div id="side">
+                <div id="projects">
+                        <h2>JavaScript Books</h2>
+
+                        <div class="box">
+                        <a href="http://jsninja.com/"><img src="/files/ninja.74.jpg" class="icon" alt="Secrets of the JavaScript Ninja"/></a>
+                        <div class="desc">
+                                <h3><a href="http://jsninja.com/">JavaScript Secrets</a></h3>
+                                <p>Secret techniques of top JavaScript programmers.</p>
+                        </div>
+                        </div>
+                        <div class="box">
+                        <a href="http://jspro.org/"><img src="/images/ejohn-side-book.gif" class="icon" alt="Pro JavaScript Techniques"/></a>
+                        <div class="desc">
+                                <h3><a href="http://jspro.org/">Pro JavaScript</a></h3>
+                                <p>The best techniques for professional  JavaScript. Published by Apress.</p>
+                        </div>
+                        </div>
+
+                        <h2><a href="http://twitter.com/jeresig">Micro Updates</a></h2>
+                        <div class="box">
+                        <a href="http://twitter.com/jeresig"><img src="/images/twitter-74.png" class="icon" alt="John Resig Twitter Updates"/></a>
+                        <div class="desc">
+                                <h3><a href="http://twitter.com/jeresig">@jeresig</a></h3>
+                                <p>Infrequent, short, updates and links.</p>
+                        </div>
+                        </div>
+
+                        <h2><a href="http://jobs.jsninja.com/">JavaScript Jobs</a></h2>
+                        <div class="box">
+			<h3><a href="http://jobs.jsninja.com/">Ninja Jobs: JavaScript Jobs</a></h3>
+			<!--<h3><a href="http://www.mozilla.com/en-US/careers/">Mozilla: Browser Jobs</a></h3>-->
+                        </div>
+
+			<br/><br/>
+
+			<div id="bsap_1266114" class="bsarocks bsap_4781b916559ccb5e5661d93b10000fad"></div>
+			<a href="http://adpacks.com" id="bsap_aplink">via Ad Packs</a>
+
+			<br/>
+                        <div class="box">
+			  <br/><strong><a href="http://mediatemple.net/" style="color:#FFF;">VPS Hosting Provided by Media Temple</a></strong>
+			</div>
+
+			<br/>
+			<small><a href="http://ukiyo-e.org/">Ukiyo-e: Japanese Woodblock Prints</a></small>
+                </div>
+        </div>
+
+</div>
 	</body>
 </html>
